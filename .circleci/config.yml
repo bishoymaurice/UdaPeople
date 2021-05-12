@@ -204,9 +204,7 @@ jobs:
       - add_ssh_keys:
           fingerprints: ["56:7f:e9:a4:d9:07:45:63:c7:5d:ca:7b:8f:2a:f3:98"]
       - attach_workspace:
-          root: ~/
-          paths:
-            - UdaPeople/.circleci/ansible/inventory.txt
+          at: UdaPeople/.circleci/ansible/inventory.txt
       - run:
           name: Configure server
           command: |
@@ -245,9 +243,7 @@ jobs:
             nodejs -v
             npm -v
       - attach_workspace:
-          root: ~/
-          paths:
-            - UdaPeople/.circleci/ansible/inventory.txt
+          at: UdaPeople/.circleci/ansible/inventory.txt
       - run:
           name: Get backend url
           command: |
@@ -271,9 +267,7 @@ jobs:
       - add_ssh_keys:
           fingerprints: ["56:7f:e9:a4:d9:07:45:63:c7:5d:ca:7b:8f:2a:f3:98"]
       - attach_workspace:
-          root: ~/
-          paths:
-            - UdaPeople/.circleci/ansible/inventory.txt
+          at: UdaPeople/.circleci/ansible/inventory.txt
       - run:
           name: Deploy backend
           command: |
@@ -289,9 +283,7 @@ jobs:
           command: |
             apk add curl
       - attach_workspace:
-          root: ~/
-          paths:
-            - UdaPeople/.circleci/ansible/inventory.txt
+          at: UdaPeople/.circleci/ansible/inventory.txt
       - run:
           name: Get backend url
           command: |
