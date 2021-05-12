@@ -85,6 +85,7 @@ jobs:
           command: |
             cd ./frontend
             export PATH=$PATH:./node_modules/.bin
+            echo $PATH
             npm test
       - save_cache:
           paths: [frontend/node_modules]
@@ -102,6 +103,7 @@ jobs:
           command: |
             cd ./backend
             export PATH=$PATH:./node_modules/.bin
+            echo $PATH
             npm test
       - save_cache:
           paths: [backend/node_modules]
