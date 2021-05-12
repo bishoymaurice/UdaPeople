@@ -265,7 +265,7 @@ jobs:
                     
   deploy-backend:
     docker:
-      image: ansible/ansible:ubuntu1404
+      - image: ansible/ansible:ubuntu1404
     steps:
       - checkout
       - add_ssh_keys:
@@ -281,7 +281,7 @@ jobs:
 
   smoke-test:
     docker:
-      - image:alpine:3.13.5
+      - image: alpine:3.13.5
     steps:
       - checkout
       - run:
@@ -310,14 +310,12 @@ jobs:
       - run:
           name: Rollback in case of failure
           command: |
-            
             # Backend
             if [ $BackendTestHttpCode != 200 ]
             then
               echo "Backend smoke test failed"
               return 1;
             fi
-
             # Frontend
             if curl -s ${FrontendURL} | grep "Welcome"
             then
@@ -376,50 +374,18 @@ workflows:
           requires: [test-frontend, test-backend, scan-frontend, scan-backend]
           filters:
             branches:
-              only: [test-feature-branch]
-              filters:
-                branches:
-                  only:
-                    - master
+              only: [master]
       - configure-infrastructure:
           requires: [deploy-infrastructure]
-          filters:
-            branches:
-              only:
-                - master
       - run-migrations:
           requires: [configure-infrastructure]
-          filters:
-            branches:
-              only:
-                - master
       - deploy-frontend:
           requires: [run-migrations]
-          filters:
-            branches:
-              only:
-                - master
       - deploy-backend:
           requires: [run-migrations]
-          filters:
-            branches:
-              only:
-                - master
       - smoke-test:
           requires: [deploy-backend, deploy-frontend]
-          filters:
-            branches:
-              only:
-                - master
       - cloudfront-update:
           requires: [smoke-test]
-          filters:
-            branches:
-              only:
-                - master
       - cleanup:
           requires: [cloudfront-update]
-          filters:
-            branches:
-              only:
-                - master
