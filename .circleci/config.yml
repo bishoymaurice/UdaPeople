@@ -84,6 +84,8 @@ jobs:
           name: Test front-end
           command: |
             cd ./frontend
+            pwd
+            ls -ltr
             export PATH=$PATH:/home/circleci/project/frontend/node_modules/.bin
             echo $PATH
             npm test
@@ -102,6 +104,8 @@ jobs:
           name: Test back-end
           command: |
             cd ./backend
+            pwd
+            ls -ltr
             export PATH=$PATH:/home/circleci/project/backend/node_modules/.bin
             echo $PATH
             npm test
