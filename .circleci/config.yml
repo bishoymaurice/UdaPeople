@@ -84,7 +84,7 @@ jobs:
           name: Test front-end
           command: |
             cd ./frontend
-            export PATH=$PATH:./node_modules/.bin
+            export PATH=$PATH:/home/circleci/project/frontend/node_modules/.bin
             echo $PATH
             npm test
       - save_cache:
@@ -102,7 +102,7 @@ jobs:
           name: Test back-end
           command: |
             cd ./backend
-            export PATH=$PATH:./node_modules/.bin
+            export PATH=$PATH:/home/circleci/project/backend/node_modules/.bin
             echo $PATH
             npm test
       - save_cache:
