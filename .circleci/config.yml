@@ -203,7 +203,7 @@ jobs:
       - checkout
       - add_ssh_keys:
           fingerprints: ["56:7f:e9:a4:d9:07:45:63:c7:5d:ca:7b:8f:2a:f3:98"]
-      - attach_to_workspace:
+      - attach_workspace:
           root: ~/
           paths:
             - UdaPeople/.circleci/ansible/inventory.txt
@@ -244,7 +244,7 @@ jobs:
             apt install npm -y
             nodejs -v
             npm -v
-      - attach_to_workspace:
+      - attach_workspace:
           root: ~/
           paths:
             - UdaPeople/.circleci/ansible/inventory.txt
@@ -270,7 +270,7 @@ jobs:
       - checkout
       - add_ssh_keys:
           fingerprints: ["56:7f:e9:a4:d9:07:45:63:c7:5d:ca:7b:8f:2a:f3:98"]
-      - attach_to_workspace:
+      - attach_workspace:
           root: ~/
           paths:
             - UdaPeople/.circleci/ansible/inventory.txt
@@ -288,7 +288,7 @@ jobs:
           name: Install dependencies
           command: |
             apk add curl
-      - attach_to_workspace:
+      - attach_workspace:
           root: ~/
           paths:
             - UdaPeople/.circleci/ansible/inventory.txt
