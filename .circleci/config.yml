@@ -336,16 +336,16 @@ jobs:
           command: |
             
             # Backend
-            if [ $BackendTestHttpCode != 200 ]
-            then
-              echo "Backend smoke test failed"
-              return 1;
+            if [ $BackendTestHttpCode != 200 ] \
+            then \
+              echo "Backend smoke test failed" \
+              return 1; \
             fi
 
             # Frontend
-            if curl -s ${FrontendURL} | grep "Welcome"
-            then
-              return 1;
+            if curl -s ${FrontendURL} | grep "Welcome" \
+            then \
+              return 1; \
             fi
 
   cloudfront-update:
