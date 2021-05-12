@@ -336,7 +336,7 @@ jobs:
             --stack-name UDA_PEOPLE_FRONTEND_$CIRCLE_WORKFLOW_ID \
             --parameter-overrides WorkflowID=$CIRCLE_WORKFLOW_ID
 
-cleanup:
+  cleanup:
     docker:
       - image: amazon/aws-cli
     steps:
