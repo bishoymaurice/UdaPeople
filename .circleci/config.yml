@@ -202,15 +202,15 @@ jobs:
     steps:
       - checkout
       - add_ssh_keys:
-          fingerprints: ["56:7f:e9:a4:d9:07:45:63:c7:5d:ca:7b:8f:2a:f3:98"]
+        fingerprints: ["56:7f:e9:a4:d9:07:45:63:c7:5d:ca:7b:8f:2a:f3:98"]
       - attach_workspace:
-          root: ~/
-          paths:
-            - UdaPeople/.circleci/ansible/inventory.txt
+        root: ~/
+        paths:
+          - UdaPeople/.circleci/ansible/inventory.txt
       - run:
-          name: Configure server
-          command: |
-            ansible-playbook -i inventory.txt configure-server.yml
+        name: Configure server
+        command: |
+          ansible-playbook -i inventory.txt configure-server.yml
 
   run-migrations:
     docker:
