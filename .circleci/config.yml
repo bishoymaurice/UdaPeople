@@ -138,10 +138,6 @@ jobs:
           key: scan-backend
 
   deploy-infrastructure:
-    filters:
-      branches:
-        only:
-          - master
     docker:
       - image: amazon/aws-cli
     steps:
@@ -201,10 +197,6 @@ jobs:
               done
 
   configure-infrastructure:
-    filters:
-      branches:
-        only:
-          - master
     docker:
       - image: ansible/ansible:ubuntu1404
     steps:
@@ -221,10 +213,6 @@ jobs:
             ansible-playbook -i inventory.txt configure-server.yml
 
   run-migrations:
-    filters:
-      branches:
-        only:
-          - master
     docker:
       - image: circleci/node:13.8.0
     steps:
@@ -243,10 +231,6 @@ jobs:
             fi
 
   deploy-frontend:
-    filters:
-      branches:
-        only:
-          - master
     docker:
       - image: amazon/aws-cli
     steps:
@@ -280,10 +264,6 @@ jobs:
             aws s3 sync . s3://udapeople-${CIRCLE_WORKFLOW_ID}/
                     
   deploy-backend:
-    filters:
-      branches:
-        only:
-          - master
     docker:
       image: ansible/ansible:ubuntu1404
     steps:
@@ -300,10 +280,6 @@ jobs:
             ansible-playbook -i inventory.txt deploy-backend.yml
 
   smoke-test:
-    filters:
-      branches:
-        only:
-          - master
     docker:
       - image:alpine:3.13.5
     steps:
@@ -349,10 +325,6 @@ jobs:
             fi
 
   cloudfront-update:
-    filters:
-      branches:
-        only:
-          - master
     docker:
       - image: amazon/aws-cli
     steps:
@@ -367,10 +339,6 @@ jobs:
             --parameter-overrides WorkflowID=$CIRCLE_WORKFLOW_ID
 
 cleanup:
-    filters:
-      branches:
-        only:
-          - master
     docker:
       - image: amazon/aws-cli
     steps:
@@ -409,17 +377,49 @@ workflows:
           filters:
             branches:
               only: [test-feature-branch]
+              filters:
+                branches:
+                  only:
+                    - master
       - configure-infrastructure:
           requires: [deploy-infrastructure]
+          filters:
+            branches:
+              only:
+                - master
       - run-migrations:
           requires: [configure-infrastructure]
+          filters:
+            branches:
+              only:
+                - master
       - deploy-frontend:
           requires: [run-migrations]
+          filters:
+            branches:
+              only:
+                - master
       - deploy-backend:
           requires: [run-migrations]
+          filters:
+            branches:
+              only:
+                - master
       - smoke-test:
           requires: [deploy-backend, deploy-frontend]
+          filters:
+            branches:
+              only:
+                - master
       - cloudfront-update:
           requires: [smoke-test]
+          filters:
+            branches:
+              only:
+                - master
       - cleanup:
           requires: [cloudfront-update]
+          filters:
+            branches:
+              only:
+                - master
