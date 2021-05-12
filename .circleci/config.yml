@@ -79,7 +79,7 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          keys: [test-frontend]
+          keys: [frontend-build]
       - run:
           name: Test front-end
           command: |
@@ -89,9 +89,9 @@ jobs:
             export PATH=$PATH:/home/circleci/project/frontend/node_modules/.bin
             echo $PATH
             npm test
-      - save_cache:
-          paths: [frontend/node_modules]
-          key: test-frontend
+      # - save_cache:
+          # paths: [frontend/node_modules]
+          # key: test-frontend
                 
   test-backend:
     docker:
@@ -99,7 +99,7 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          keys: [test-backend]
+          keys: [backend-build]
       - run:
           name: Test back-end
           command: |
@@ -109,9 +109,9 @@ jobs:
             export PATH=$PATH:/home/circleci/project/backend/node_modules/.bin
             echo $PATH
             npm test
-      - save_cache:
-          paths: [backend/node_modules]
-          key: test-backend
+      # - save_cache:
+      #     paths: [backend/node_modules]
+      #     key: test-backend
             
   scan-frontend:
     docker:
@@ -176,7 +176,7 @@ jobs:
       - persist_to_workspace:
           root: ~/
           paths:
-            - UdaPeople/.circleci/ansible/inventory.txt
+            - .circleci/ansible/inventory.txt
       - run:
           name: Check if stacks are ready
           command: |
@@ -212,7 +212,7 @@ jobs:
       - add_ssh_keys:
           fingerprints: ["56:7f:e9:a4:d9:07:45:63:c7:5d:ca:7b:8f:2a:f3:98"]
       - attach_workspace:
-          at: UdaPeople/.circleci/ansible/inventory.txt
+          at: .circleci/ansible/inventory.txt
       - run:
           name: Configure server
           command: |
@@ -251,12 +251,12 @@ jobs:
             nodejs -v
             npm -v
       - attach_workspace:
-          at: UdaPeople/.circleci/ansible/inventory.txt
+          at: .circleci/ansible/inventory.txt
       - run:
           name: Get backend url
           command: |
-            sed -n '2p' UdaPeople/.circleci/ansible/inventory.txt > UdaPeople/.circleci/ansible/backendip.txt
-            export BACKEND_IP=$(cat UdaPeople/.circleci/ansible/backendip.txt)
+            sed -n '2p' .circleci/ansible/inventory.txt > .circleci/ansible/backendip.txt
+            export BACKEND_IP=$(cat .circleci/ansible/backendip.txt)
             export API_URL="http://${BACKEND_IP}:3030"
             echo "${API_URL}"
       - run:
@@ -275,7 +275,7 @@ jobs:
       - add_ssh_keys:
           fingerprints: ["56:7f:e9:a4:d9:07:45:63:c7:5d:ca:7b:8f:2a:f3:98"]
       - attach_workspace:
-          at: UdaPeople/.circleci/ansible/inventory.txt
+          at: .circleci/ansible/inventory.txt
       - run:
           name: Deploy backend
           command: |
@@ -291,12 +291,12 @@ jobs:
           command: |
             apk add curl
       - attach_workspace:
-          at: UdaPeople/.circleci/ansible/inventory.txt
+          at: .circleci/ansible/inventory.txt
       - run:
           name: Get backend url
           command: |
-            sed -n '2p' UdaPeople/.circleci/ansible/inventory.txt > UdaPeople/.circleci/ansible/backendip.txt
-            export BACKEND_IP=$(cat UdaPeople/.circleci/ansible/backendip.txt)
+            sed -n '2p' .circleci/ansible/inventory.txt > .circleci/ansible/backendip.txt
+            export BACKEND_IP=$(cat .circleci/ansible/backendip.txt)
             export API_URL="http://${BACKEND_IP}:3030"
             echo "${API_URL}"
       - run:
