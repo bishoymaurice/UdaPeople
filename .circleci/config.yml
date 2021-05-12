@@ -84,7 +84,7 @@ jobs:
           name: Test front-end
           command: |
             cd ./frontend
-            npm test || echo "Did not passed"
+            npm test
       - save_cache:
           paths: [frontend/node_modules]
           key: test-frontend
@@ -100,7 +100,7 @@ jobs:
           name: Test back-end
           command: |
             cd ./backend
-            npm test || echo "Did not passed"
+            npm test
       - save_cache:
           paths: [backend/node_modules]
           key: test-backend
@@ -116,7 +116,7 @@ jobs:
           name: Scan front-end
           command: |
             cd ./frontend
-            npm audit --audit-level=critical  || echo "Did not passed"
+            npm audit --audit-level=critical
       - save_cache:
           paths: [frontend/node_modules]
           key: scan-frontend
@@ -132,7 +132,7 @@ jobs:
           name: Scan back-end
           command: |
             cd ./backend
-            npm audit --audit-level=critical || echo "Did not passed"
+            npm audit --audit-level=critical
       - save_cache:
           paths: [backend/node_modules]
           key: scan-backend
