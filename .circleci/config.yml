@@ -93,11 +93,8 @@ jobs:
             export PATH=$PATH:/home/circleci/project/frontend/node_modules/.bin
             echo $PATH
             npm test
-      - save_cache:
-          paths: [frontend/node_modules]
-          key: frontend-build
-      - slack-notify:
-          msg: 'Frontend test failed'
+      # - slack-notify:
+      #     msg: 'Frontend test failed'
 
   test-backend:
     docker:
@@ -115,9 +112,6 @@ jobs:
             export PATH=$PATH:/home/circleci/project/backend/node_modules/.bin
             echo $PATH
             npm test
-      - save_cache:
-          paths: [backend/node_modules]
-          key: backend-build
 
   scan-frontend:
     docker:
@@ -125,15 +119,12 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          keys: [scan-frontend]
+          keys: [frontend-build]
       - run:
           name: Scan front-end
           command: |
             cd ./frontend
             npm audit --audit-level=critical
-      - save_cache:
-          paths: [frontend/node_modules]
-          key: scan-frontend
 
   scan-backend:
     docker:
@@ -141,15 +132,12 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          keys: [scan-backend]
+          keys: [backend-build]
       - run:
           name: Scan back-end
           command: |
             cd ./backend
             npm audit --audit-level=critical
-      - save_cache:
-          paths: [backend/node_modules]
-          key: scan-backend
 
   deploy-infrastructure:
     docker:
