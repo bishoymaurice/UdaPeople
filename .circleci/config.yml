@@ -4,15 +4,24 @@ orbs:
 commands:
   slack-notify:
     description: Send slack notification in case of failure
-    parameters:
-      msg:
-        default: "Hello from Slack!"
-        type: string
     steps:
       - slack/notify:
-          channel: software
-          event: fail
-          template: Rollback executed due to smoke test failed!
+          custom: |
+            {
+              "blocks": [
+                {
+                  "type": "section",
+                  "fields": [
+                    {
+                      "type": "plain_text",
+                      "text": "*This is a text notification*",
+                      "emoji": true
+                    }
+                  ]
+                }
+              ]
+            }
+          event: always
 
   destroy-environment:
     description: Destroy back-end and front-end cloudformation stacks given a workflow ID.
@@ -110,8 +119,7 @@ jobs:
             export PATH=$PATH:/home/circleci/project/backend/node_modules/.bin
             echo $PATH
             npm test
-      - slack-notify:
-          msg: 'Backend test failed'
+      - slack-notify
 
   scan-frontend:
     docker:
