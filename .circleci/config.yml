@@ -2,6 +2,18 @@ version: 2.1
 orbs:
   slack: circleci/slack@4.1
 commands:
+  slack-notify:
+    description: Send slack notification in case of failure
+    parameters:
+      msg:
+        default: "Hello from Slack!"
+        type: string
+    steps:
+      - slack/notify:
+          channel: software
+          event: fail
+          template: Rollback executed due to smoke test failed!
+
   destroy-environment:
     description: Destroy back-end and front-end cloudformation stacks given a workflow ID.
     steps:
@@ -15,10 +27,6 @@ commands:
             aws cloudformation delete-stack --stack-name UDA_PEOPLE_BACKEND_$CIRCLE_WORKFLOW_ID
             # Remove frontend stack
             aws cloudformation delete-stack --stack-name UDA_PEOPLE_FRONTEND_$CIRCLE_WORKFLOW_ID
-      - slack/notify:
-          channel: software
-          event: fail
-          template: Rollback executed due to smoke test failed!
 
   revert-migrations:
     description: Revert the last migration if successfully run in the current workflow.
@@ -33,11 +41,7 @@ commands:
             then
               npm migrations:revert
             fi
-      - slack/notify:
-          channel: software
-          event: fail
-          template: Migration revert executed due to smoke test failed!
-            
+
 jobs:
   build-frontend:
     docker:
@@ -89,10 +93,13 @@ jobs:
             export PATH=$PATH:/home/circleci/project/frontend/node_modules/.bin
             echo $PATH
             npm test
-      # - save_cache:
-          # paths: [frontend/node_modules]
-          # key: test-frontend
-                
+      - save_cache:
+          paths: [frontend/node_modules]
+          key: frontend-build
+      - slack-notify:
+          msg: "Frontend test failed"
+          when: on_fail
+
   test-backend:
     docker:
       - image: circleci/node:13.8.0
@@ -109,10 +116,10 @@ jobs:
             export PATH=$PATH:/home/circleci/project/backend/node_modules/.bin
             echo $PATH
             npm test
-      # - save_cache:
-      #     paths: [backend/node_modules]
-      #     key: test-backend
-            
+      - save_cache:
+          paths: [backend/node_modules]
+          key: backend-build
+
   scan-frontend:
     docker:
       - image: circleci/node:13.8.0
@@ -266,7 +273,7 @@ jobs:
             npm run build
             cd dist
             aws s3 sync . s3://udapeople-${CIRCLE_WORKFLOW_ID}/
-                    
+
   deploy-backend:
     docker:
       - image: ansible/ansible:ubuntu1404
