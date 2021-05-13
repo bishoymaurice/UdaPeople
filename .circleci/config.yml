@@ -97,8 +97,7 @@ jobs:
           paths: [frontend/node_modules]
           key: frontend-build
       - slack-notify:
-          msg: "Frontend test failed"
-          when: on_fail
+        - msg: "Frontend test failed"
 
   test-backend:
     docker:
